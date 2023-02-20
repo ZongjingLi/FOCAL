@@ -7,6 +7,7 @@ import argparse
 parser = argparse.ArgumentParser()
 parser.add_argument("--device",     default = device)
 parser.add_argument("--concept_dim",default = 100)
+parser.add_argument()
 
 # add the training epoch details 
 parser.add_argument("--epoch",   default = 1000)
