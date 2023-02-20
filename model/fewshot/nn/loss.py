@@ -11,5 +11,18 @@ class FewshotLoss(nn.Module):
 
     def forward(self,outputs,inputs):
         losses = []
-        for i,category in enumerate(inputs["val_sample"]["category"]):
+        for i,categories in enumerate(inputs["val_sample"]["category"]):
             ends = outputs["val_sample"]["end"][i]
+
+            targets = inputs["val_sample"]["target"][i]
+            outputs = inputs["val_sample"]["answer_tokenized"][i]
+
+
+            ls = []
+
+            for j,category in enumerate(categories):
+                pass
+
+            losses.append(torch.stack(ls).mean())
+
+        return {"validation_loss":torch.stack(losses).mean()}
