@@ -10,6 +10,7 @@ parser.add_argument("--concept_dim",default = 100)
 
 # add details in the construction loss
 parser.add_argument("--fewshot_tau",default = 0.2)
+parser.add_argument("--temperature",default = 0.2)
 
 # add the training epoch details 
 parser.add_argument("--epoch",   default = 1000)
