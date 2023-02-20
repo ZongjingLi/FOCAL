@@ -21,8 +21,18 @@ class FewshotLoss(nn.Module):
             ls = []
 
             for j,category in enumerate(categories):
-                pass
+                if category == "boolean":
+                    l = F.binary_cross_entropy_with_logits(ends[j].unsqueeze(0),
+                        targets[j].unsqueeze(0).unsqueeze(0))
+                elif category == "choice":
+                    l = F.nll_loss(ends[j].clamp(min=EPS).log(), targets[j].unsqueeze(0))
+                elif category == "count":
+                    l = F.l1_loss(ends[j].unsqueeze(0), targets[j].unsqueeze(0).unsqueeze(0))
+                elif category == "token":
+                    l = F.cross_entropy(ends[j].unsqueeze(0), answers[j].unsqueeze(0))
+                else:
+                    raise NotImplementedError
 
-            losses.append(torch.stack(ls).mean())
+        losses.append(torch.stack(ls).mean())
 
         return {"validation_loss":torch.stack(losses).mean()}

@@ -7,7 +7,6 @@ import argparse
 parser = argparse.ArgumentParser()
 parser.add_argument("--device",     default = device)
 parser.add_argument("--concept_dim",default = 100)
-parser.add_argument()
 
 # add details in the construction loss
 parser.add_argument("--fewshot_tau",default = 0.2)
