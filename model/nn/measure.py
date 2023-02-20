@@ -31,3 +31,38 @@ class Measure(nn.Module):
 
         intersection = torch.cat([maxima + minima, maxima - minima],-1)/2
         return intersection 
+
+    def entailment(self,x,y):
+        x_center,x_offset = x.chunk(2,-1)
+        y_center,y_offset = y.chunk(2,-1)
+
+        maxima = torch.min(x_center + x_offset, y_center + y_offset)
+        minima = torch.max(x_center - x_offset, y_center - y_offset)
+
+        intersection_volume = F.softplus((maxima-minima)/2, 1 / self.temperature.clamp(min=EPS))
+        volume = F.softplus(x_offset, 1 / self.temperature).clamp(min=EPS)
+        log = torch.sum(torch.log((intersection_volume / volume)), -1).clamp(max=-EPS)
+        logit = log - torch.log(1 - torch.exp(log))
+        return logit
+
+    def union(self,x,y):
+        x_center,x_offset = x.chunk(2,-1)
+        y_center,y_offset = y.chunk(2,-1)
+
+        maxima = torch.min(x_center + x_offset, y_center + y_offset)
+        minima = torch.max(x_center - x_offset, y_center - y_offset)
+        union =  torch.cat([maxima + minima, maxima - minima], -1)/2
+        return union
+
+    def specific_boundary(self,xs):
+        x_center,x_offset = xs.chunk(2,-1)
+        minima,_ = torch.min(x_center - x_offset,0)
+        maxima,_ = torch.max(x_center + x_offset,0)
+        union = torch.cat([maxima + minima,maxima - minima]/2)
+        return union
+    
+    def iou(self,x,y):
+        intersection = self.intersection(x,y)
+        union = self.union(x,y)
+        log_pr = self(intersection) - self(union)
+        return log_pr
