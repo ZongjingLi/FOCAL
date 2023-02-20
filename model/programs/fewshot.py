@@ -1,4 +1,4 @@
-from models.programs.abstract_program import AbstractProgram
+from model.programs.abstract_program import AbstractProgram
 
 
 class Fewshot(AbstractProgram):
