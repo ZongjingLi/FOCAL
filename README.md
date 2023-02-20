@@ -8,3 +8,5 @@ ICLR 2022
 [Paper](https://openreview.net/pdf?id=htWIlvDcY8) [Website](https://people.csail.mit.edu/jerrymei/projects/falcon/) 
 ![](src/model.gif)
 ![](src/teaser.gif)
+
+This repo aimed to build a model that learns quick.
