@@ -9,4 +9,4 @@ ICLR 2022
 ![](src/model.gif)
 ![](src/teaser.gif)
 
-This repo aimed to build a model that learns quick.
+This repo aimed to build a model that learns symbolic concept structures.
