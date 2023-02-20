@@ -9,6 +9,9 @@ parser.add_argument("--device",     default = device)
 parser.add_argument("--concept_dim",default = 100)
 parser.add_argument()
 
+# add details in the construction loss
+parser.add_argument("--fewshot_tau",default = 0.2)
+
 # add the training epoch details 
 parser.add_argument("--epoch",   default = 1000)
 parser.add_argument("--lr",      default = 2e-3)
