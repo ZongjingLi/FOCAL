@@ -6,7 +6,10 @@ import argparse
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--device",     default = device)
+
+# build the concept engine
 parser.add_argument("--concept_dim",default = 100)
+parser.add_argument("concept_repr",default = "box")
 
 # add details in the construction loss
 parser.add_argument("--fewshot_tau",default = 0.2)
