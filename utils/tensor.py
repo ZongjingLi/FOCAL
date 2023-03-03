@@ -115,3 +115,43 @@ def apply_grid(x):
     return torch.cat([x, u.expand(x.shape[0], *([-1] * (len(x.shape) - 1))).to(x.device),
         v.expand(x.shape[0], *([-1] * (len(x.shape) - 1))).to(x.device)], -3)
 
+
+
+
+def nan_hook(self, inputs, outputs, key=""):
+    if isinstance(outputs, dict):
+        for k, v in outputs.items():
+            nan_hook(self, inputs, v, f"{key}.{k}")
+        return
+    has_nan = is_nan(outputs)
+    if has_nan:
+        raise ValueError(f"Found Nan in entry \'{key}\' of class {self.__class__.__name__}.")
+    has_inf = is_inf(outputs)
+    if has_inf:
+        raise ValueError(f"Found Inf in entry \'{key}\' of class {self.__class__.__name__}.")
+
+
+def freeze(module):
+    for param in module.parameters():
+        param.requires_grad = False
+    module.eval()
+
+
+def compose_image(image, mask):
+    return torch.cat([image.unsqueeze(0) * mask.unsqueeze(1), image.unsqueeze(0).expand(len(mask), -1, -1, -1)],
+        1)
+
+
+def mask2bbox(mask):
+    return mask.sum(-1, keepdims=True).bool() & mask.bool().sum(-2, keepdims=True).bool()
+
+
+def create_dummy():
+    return nn.Parameter(torch.zeros(1).squeeze())
+
+
+def invert(x):
+    assert x.ndim == 1
+    y = torch.zeros_like(x)
+    y[x] = torch.arange(len(x))
+    return y
